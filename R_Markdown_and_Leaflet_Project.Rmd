@@ -1,0 +1,57 @@
+---
+title: "R_Markdown_and_Leaflet_Project"
+author: "Sumit Mittal"
+date: "22/02/2022"
+output: html_document
+---
+
+```{r}
+library(leaflet)
+```
+
+```{r}
+library(htmltools)
+```
+
+#Accessing the data from .csv text file
+
+```{r}
+setwd("C:/Users/sumit.mittal/Downloads/Projects/Leaflet Project")
+datamap <- read.csv(file = "TheWorlds50BestRestaurants2018.csv", header = TRUE, sep = ",")
+
+```
+
+#Creating my data frame in order to manipulate the dataset like a table.
+
+```{r}
+mimapa <- data.frame(Ranking = datamap$Ranking,
+                     Name = datamap$Name,
+                     City = datamap$City,
+                     Country = datamap$Country,
+                     Latitude = datamap$Latitude,
+                     Longitude = datamap$Longitude
+                     )
+```
+
+#Activating the Map
+
+```{r}
+map <- mimapa %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(popup=paste
+             ("<br>Country: ", 
+               htmlEscape(mimapa$Country), 
+              "<br>City: ", 
+               htmlEscape(mimapa$City), 
+              "<br>Restaurant: ", 
+               htmlEscape(mimapa$Name),
+              "<br>Ranking: ",
+               formatC(datamap$Ranking, format = "d", big.mark = ",")
+              ) 
+            )
+```
+
+```{r}
+map
+```
